@@ -1,5 +1,7 @@
 # daydir
 
+[![Latest release](https://img.shields.io/badge/release-latest-blue)](https://github.com/n0isy/daydir/releases/latest)
+
 A **984-byte Windows x64 executable** that creates today's directory next to itself
 and removes yesterday's directory if it is empty.
 
@@ -139,11 +141,11 @@ All filesystem scenarios use temporary directories.
 
 [.github/workflows/build.yml](.github/workflows/build.yml) defines an Ubuntu build
 for pushes to `main`, version tags (`v*`), pull requests and manual dispatch. It installs
-NASM, assembles the EXE and uploads it with the documentation as the
+NASM, assembles the EXE and uploads it as the
 `daydir-windows-x64` artifact.
 
 For a version tag, a dependent release job downloads the artifact and publishes
-a GitHub Release with the EXE and documentation. For example:
+a GitHub Release containing `daydir.exe`. Documentation stays in the repository. For example:
 
 ```text
 git tag -a v1.0.0 -m "daydir v1.0.0"

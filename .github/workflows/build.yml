@@ -26,15 +26,12 @@ jobs:
       - name: Assemble the executable
         run: python3 build.py
 
-      - name: Upload executable and documentation
+      - name: Upload executable
         uses: actions/upload-artifact@v7
         with:
           name: daydir-windows-x64
           if-no-files-found: error
-          path: |
-            dist/daydir.exe
-            README.md
-            HEX-ANALISYS.md
+          path: dist/daydir.exe
 
   release:
     if: startsWith(github.ref, 'refs/tags/v')
@@ -58,8 +55,6 @@ jobs:
           RELEASE_TAG: ${{ github.ref_name }}
         run: |
           gh release create "$RELEASE_TAG" \
-            artifact/dist/daydir.exe \
-            artifact/README.md \
-            artifact/HEX-ANALISYS.md \
+            artifact/daydir.exe \
             --title "daydir $RELEASE_TAG" \
             --notes "A Windows x64 utility that creates today's directory next to the executable and removes yesterday's directory only when empty. Built by GitHub Actions."
