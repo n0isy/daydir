@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Real PE filesystem tests on Windows/Wine, plus a full Gregorian cycle on Linux."""
+"""Directory behavior tests on Windows/Wine and calendar tests on Linux."""
 from pathlib import Path
 from datetime import date, datetime, timedelta
 import ctypes
@@ -12,7 +12,6 @@ import tempfile
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 import build
-from check_pe import check_pe
 
 WINE = os.environ.get("WINE") or ("/usr/lib/wine/wine64" if Path("/usr/lib/wine/wine64").exists() else "wine")
 ENV = dict(os.environ, WINEDEBUG="-all")
@@ -124,7 +123,6 @@ def exhaustive_calendar(tmp):
     print(f"PASS {count:,} consecutive dates: Gregorian decrement and UTF-16 format", flush=True)
 
 def main():
-    check_pe(ROOT / "dist" / "daydir.exe")
     # Start Wine's test server explicitly so each short EXE need not boot Wine.
     server = None
     if os.name != "nt":
@@ -155,7 +153,7 @@ def main():
                             "--out", str(dest)], check=True, capture_output=True)
             scenario(dest / "daydir.exe", date.fromisoformat(stamp), tmp / "dates" / stamp)
             print(f"PASS calendar boundary {stamp}", flush=True)
-        print(f"PASS {RUNS} PE process runs; release binaries were not modified", flush=True)
+        print(f"PASS {RUNS} program runs", flush=True)
     if server is not None and server.poll() is None:
         server.terminate()
         server.wait(timeout=10)

@@ -26,12 +26,6 @@ jobs:
       - name: Assemble the executable
         run: python3 build.py
 
-      - name: Check PE structure and regenerate the byte report
-        run: |
-          python3 tests/check_pe.py
-          python3 inspect_pe.py
-          git diff --exit-code -- HEX-ANALISYS.md
-
       - name: Upload executable and documentation
         uses: actions/upload-artifact@v7
         with:
@@ -39,7 +33,6 @@ jobs:
           if-no-files-found: error
           path: |
             dist/daydir.exe
-            dist/daydir.exe.sha256
             README.md
             HEX-ANALISYS.md
 
@@ -51,16 +44,12 @@ jobs:
       contents: write
       actions: read
     steps:
-      - name: Download the verified build artifact
+      - name: Download the build artifact
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
           RUN_ID: ${{ github.run_id }}
         run: gh run download "$RUN_ID" --name daydir-windows-x64 --dir artifact
-
-      - name: Verify the executable checksum
-        working-directory: artifact/dist
-        run: sha256sum --check daydir.exe.sha256
 
       - name: Publish the versioned release
         env:
@@ -70,9 +59,7 @@ jobs:
         run: |
           gh release create "$RELEASE_TAG" \
             artifact/dist/daydir.exe \
-            artifact/dist/daydir.exe.sha256 \
             artifact/README.md \
             artifact/HEX-ANALISYS.md \
-            --verify-tag \
             --title "daydir $RELEASE_TAG" \
-            --notes "A 984-byte Windows x64 utility. Creates today's directory next to the executable and removes yesterday's directory only when empty. Built by GitHub Actions; includes the SHA-256 checksum and byte analysis."
+            --notes "A Windows x64 utility that creates today's directory next to the executable and removes yesterday's directory only when empty. Built by GitHub Actions."

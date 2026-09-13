@@ -2,9 +2,6 @@
 ; NASM emits the headers, code and imports without an external linker.
 bits 64
 org 0
-%ifdef MAP_FILE
-[map symbols MAP_FILE]
-%endif
 %define ALIGNMENT 4
 %define ROUND(x) (((x) + ALIGNMENT - 1) & ~(ALIGNMENT - 1))
 

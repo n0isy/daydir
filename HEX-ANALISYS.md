@@ -1,10 +1,9 @@
 # HEX analysis of daydir.exe
 
-File size: **984 bytes**. SHA-256: `9dd5b92637e3a22ebe754e214144f914c8b9ff8ea45e0f4b5ec52ba1cffea694`.
+File size: **984 bytes**.
 
-Generated from `dist/daydir.exe` and NASM's symbol map by `python inspect_pe.py`.
+Byte layout of the executable assembled from `src/daydir.asm`.
 Offsets and inclusive ranges below are hexadecimal. Every byte is assigned exactly once.
-The generator also writes `build/bytes.csv`: one row for each byte.
 
 ## File layout
 
@@ -384,15 +383,6 @@ System DLLs and loader memory are also outside the 984-byte file.
 03C0  69 74 50 72 6f 63 65 73 73 00 4b 45 52 4e 45 4c  itProcess.KERNEL
 03D0  33 32 2e 64 6c 6c 00 00                          32.dll..
 ```
-
-## Regenerate
-
-```text
-python build.py
-python inspect_pe.py
-```
-
-Both NASM and NDISASM are included in the NASM distribution. Python uses only its standard library.
 
 References: [Microsoft PE/COFF](https://learn.microsoft.com/en-us/windows/win32/debug/pe-format),
 [NASM flat binary output](https://www.nasm.us/doc/nasm09.html#section-9.1).

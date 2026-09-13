@@ -3,7 +3,6 @@
 from datetime import date
 from pathlib import Path
 import argparse
-import hashlib
 import os
 import subprocess
 
@@ -18,10 +17,7 @@ def build(out=DIST, test_date=None):
     if test_date and out == DIST:
         raise ValueError("Test dates require a separate output directory")
     out.mkdir(parents=True, exist_ok=True)
-    work = ROOT / "build" if out == DIST else out / "build"
-    work.mkdir(parents=True, exist_ok=True)
-    # NASM's map directive accepts a bare filename, not a quoted path.
-    defines = ["-DMAP_FILE=daydir.map"]
+    defines = []
     if test_date:
         stamp = date.fromisoformat(test_date)
         defines += [f"-DTEST_YEAR={stamp.year}", f"-DTEST_MONTH={stamp.month}",
@@ -29,10 +25,8 @@ def build(out=DIST, test_date=None):
     exe = out / "daydir.exe"
     run(os.environ.get("NASM", "nasm"), "-f", "bin", "-Ox", "-I",
         (ROOT / "src").as_posix()+"/", *defines, ROOT / "src/daydir.asm",
-        "-o", exe, "-l", work / "daydir.lst", cwd=work)
-    checksum = hashlib.sha256(exe.read_bytes()).hexdigest()
-    (out / "daydir.exe.sha256").write_text(f"{checksum}  daydir.exe\n", encoding="ascii")
-    print(f"{exe}: {exe.stat().st_size} bytes\nSHA-256: {checksum}", flush=True)
+        "-o", exe)
+    print(f"{exe}: {exe.stat().st_size} bytes", flush=True)
     return exe
 
 if __name__ == "__main__":
