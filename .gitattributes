@@ -1,0 +1,7 @@
+* text=auto
+*.asm text eol=lf
+*.inc text eol=lf
+*.py text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.exe binary
